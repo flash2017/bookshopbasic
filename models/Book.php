@@ -1,0 +1,130 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\web\UploadedFile;
+use yii\imagine\Image;
+
+/**
+ * This is the model class for table "book".
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property int $year_of_publication
+ * @property string|null $isbn
+ * @property string|null $image
+ * @property string $created_at
+ * @property string|null $updated_at
+ * @property string|null $deleted_at
+ *
+ * @property LnkBookAuthors[] $lnkBookAuthors
+ */
+class Book extends \yii\db\ActiveRecord
+{
+    /**
+     * @var UploadedFile
+     */
+    public $imageFile;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'book';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['isbn', 'image', 'updated_at', 'deleted_at'], 'default', 'value' => null],
+            [['description'], 'default', 'value' => ''],
+            [['year_of_publication'], 'default', 'value' => 0],
+            [['name'], 'required'],
+            [['year_of_publication'], 'integer'],
+            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['name'], 'string', 'max' => 255],
+            [['description', 'image'], 'string', 'max' => 1000],
+            [['isbn'], 'string', 'max' => 18],
+            [['isbn'], 'unique'],
+        ];
+    }
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at'
+                ],
+                'value' => new Expression('NOW()')
+            ],
+        ];
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name' => 'Name',
+            'description' => 'Description',
+            'year_of_publication' => 'Year Of Publication',
+            'isbn' => 'Isbn',
+            'image' => 'image',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'deleted_at' => 'Deleted At',
+        ];
+    }
+
+    /**
+     * Gets query for [[LnkBookAuthors]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLnkBookAuthors()
+    {
+        return $this->hasMany(LnkBookAuthors::class, ['book_id' => 'id']);
+    }
+
+    public function getAuthors(): array
+    {
+        $data = [];
+        foreach ($this->getLnkBookAuthors()->all() as $lnkAuthor) {
+            $data[] = $lnkAuthor->getAuthor()->one();
+        }
+         return $data;
+    }
+
+    /**
+     * Загружает файл изображения категории
+     */
+    public function uploadImage() {
+        if ($this->imageFile) { // только если был выбран файл для загрузки
+            $name = md5(uniqid(rand(), true)) . '.' . $this->imageFile->extension;
+            // сохраняем исходное изображение в директории source
+            $source = Yii::getAlias('@webroot/images/books/source/' . $name);
+            if ($this->imageFile->saveAs($source)) {
+                // выполняем resize, чтобы получить маленькое изображение
+                $thumb = Yii::getAlias('@webroot/images/books/thumb/' . $name);
+                Image::thumbnail($source, 250, 250)->save($thumb, ['quality' => 90]);
+                return $name;
+            }
+        }
+        return false;
+    }
+
+}
