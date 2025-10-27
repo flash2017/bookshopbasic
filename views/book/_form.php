@@ -1,11 +1,19 @@
 <?php
 
+use app\models\Author;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\Book $model */
 /** @var yii\widgets\ActiveForm $form */
+
+$authorsSearchUrl = '/author/search';
+$authorsDataList = Author::find()->limit(10)->all();
+$authorsList = ArrayHelper::map($authorsDataList, 'id', 'name');
 ?>
 
 <div class="book-form">
@@ -22,6 +30,28 @@ use yii\widgets\ActiveForm;
 
     <?php /*= /*$form->field($model, 'image')->textInput(['maxlength' => true])*/ ?>
     <?= $form->field($model, 'imageFile')->fileInput() ?>
+    <?php echo $form->field($model, 'authors')->widget(Select2::class, [
+        'data' => $authorsList,
+        'pluginOptions' => [
+            'allowClear' => true,
+            'minimumInputLength' => 3,
+            'language' => [
+                'errorLoading' => new JsExpression("function () { return 'Waiting...'; }"),
+            ],
+            'ajax' => [
+                'url' => $authorsSearchUrl,
+                'dataType' => 'json',
+                'data' => new JsExpression('function(params) { return {author_name:params.term}; }')
+            ],
+            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+            'templateResult' => new JsExpression('function(author) { return author.first_name; }'),
+            'templateSelection' => new JsExpression('function(author) { return author.first_name; }'),
+        ],
+        'options' => [
+            'multiple' => true,
+            'placeholder' => 'Select a author ...'
+        ]
+    ]) ?>
 
     <?= $form->field($model, 'created_at')->textInput() ?>
 

@@ -11,6 +11,13 @@ use app\models\Author;
  */
 class AuthorSearch extends Author
 {
+    public ?string $author_name;
+
+    public function init(): void
+    {
+        $this->author_name = null;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -18,17 +25,8 @@ class AuthorSearch extends Author
     {
         return [
             [['id'], 'integer'],
-            [['first_name', 'last_name', 'second_name', 'created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['author_name'], 'string', 'skipOnEmpty' => false],
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
     }
 
     /**
@@ -53,21 +51,13 @@ class AuthorSearch extends Author
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+            $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'CREATED_AT' => $this->CREATED_AT,
-            'UPDATED_AT' => $this->UPDATED_AT,
-            'DELETED_AT' => $this->DELETED_AT,
-        ]);
-
-        $query->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'last_name', $this->last_name])
-            ->andFilterWhere(['like', 'second_name', $this->second_name]);
+        $query->orFilterWhere(['like', 'first_name', $this->author_name])
+            ->orFilterWhere(['like', 'last_name', $this->author_name])
+            ->orFilterWhere(['like', 'second_name', $this->author_name]);
 
         return $dataProvider;
     }

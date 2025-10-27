@@ -4,8 +4,11 @@ namespace app\controllers;
 
 use app\models\Author;
 use app\models\AuthorSearch;
+use http\Env\Response;
 use yii\filters\AccessControl;
+use yii\rest\Serializer;
 use yii\web\Controller;
+use yii\web\JsonResponseFormatter;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -33,7 +36,7 @@ class AuthorController extends Controller
                     'class' => AccessControl::class,
                     'rules' => [
                         [
-                            'actions' => ['view', 'create', 'update', 'delete'],
+                            'actions' => ['view', 'create', 'update', 'delete', 'search'],
                             'allow' => true,
                             'roles' => ['user'],
                         ],[
@@ -45,6 +48,25 @@ class AuthorController extends Controller
                 ]
             ]
         );
+    }
+
+    public function actionSearch()
+    {
+        $response = ['results' => ['id' => '', 'text' => '']];
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $authorSearch = new AuthorSearch();
+
+        $authorSearch->author_name = $this->request->getQueryParam('author_name');
+        if ($authorSearch->validate() ) {
+            $serializer = new Serializer();
+            $activeDataProvider = $authorSearch->search($this->request->queryParams);
+            if ($activeDataProvider->getTotalCount() > 0) {
+                $response['results'] = $serializer->serialize($activeDataProvider);
+            }
+        };
+
+        return $response;
     }
 
     /**
