@@ -1,12 +1,11 @@
 <?php
 
-use Yii;
-use yii\helpers\Html;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\AuthorSearch $searchModel */
+/** @var \app\models\Author\AuthorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Authors';

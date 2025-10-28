@@ -1,12 +1,12 @@
 <?php
 
-use app\models\Author;
-use app\models\Book;
+use app\models\Author\Author;
+use app\models\Book\Book;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var app\models\Book $model */
+/** @var \app\models\Book\Book $model */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Books', 'url' => ['index']];

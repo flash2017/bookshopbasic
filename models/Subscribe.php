@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Yii;
+use app\models\Author\Author;
 
 /**
  * This is the model class for table "subscribe".

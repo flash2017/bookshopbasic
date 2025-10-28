@@ -1,7 +1,8 @@
 <?php
 
-namespace app\models;
+namespace app\models\Book;
 
+use app\models\Author\LnkBookAuthors;
 use app\Validators\Book\AuthorRelationValidator;
 use app\Validators\Book\HasRealAuthors;
 use Yii;
@@ -9,8 +10,8 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\web\UploadedFile;
 use yii\imagine\Image;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "book".
@@ -69,14 +70,9 @@ class Book extends ActiveRecord
             [['isbn'], 'string', 'max' => 18],
             [['isbn'], 'unique'],
             [['authors'], 'each', 'rule' => ['integer']],
-            [['authors'], HasRealAuthors::class],
-            [['authors'], AuthorRelationValidator::class],
+            [['authors'], 'each', 'rule' => [HasRealAuthors::class]],
+            /*[['authors'], AuthorRelationValidator::class],*/
         ];
-    }
-
-    public function validateAuthors()
-    {
-
     }
 
     public function behaviors()

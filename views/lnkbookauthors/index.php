@@ -1,13 +1,13 @@
 <?php
 
-use app\models\LnkBookAuthors;
-use yii\helpers\Html;
-use yii\helpers\Url;
+use app\models\Author\LnkBookAuthors;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 /** @var yii\web\View $this */
-/** @var app\models\LnkBookAuthorsSearch $searchModel */
+/** @var \app\models\Author\LnkBookAuthorsSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Lnk Book Authors';

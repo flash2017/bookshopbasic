@@ -2,13 +2,12 @@
 
 namespace app\controllers;
 
-use app\models\Book;
-use app\models\BookSearch;
+use app\models\Book\Book;
+use app\models\Book\BookSearch;
 use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 
 /**
@@ -89,6 +88,7 @@ class BookController extends Controller
                     // сохраняем в БД имя файла изображения
                     $model->image = $name;
                 }
+
 
                 $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);

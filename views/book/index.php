@@ -1,13 +1,11 @@
 <?php
 
-use app\models\Book;
-use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\BookSearch $searchModel */
+/** @var \app\models\Book\BookSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Books';

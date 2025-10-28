@@ -1,6 +1,6 @@
 <?php
 
-use app\models\Author;
+use app\models\Author\Author;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -8,7 +8,7 @@ use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\Book $model */
+/** @var \app\models\Book\Book $model */
 /** @var yii\widgets\ActiveForm $form */
 
 $authorsSearchUrl = '/author/search';

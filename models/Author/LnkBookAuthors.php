@@ -1,8 +1,8 @@
 <?php
 
-namespace app\models;
+namespace app\models\Author;
 
-use Yii;
+use app\models\Book\Book;
 use yii\db\ActiveRecord;
 
 /**

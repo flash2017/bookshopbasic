@@ -2,11 +2,9 @@
 
 namespace app\controllers;
 
-use app\models\BookSearch;
-use app\models\LnkBookAuthorsSearch;
+use app\models\Author\TopAuthorSearch;
 use app\models\LoginForm;
 use app\models\RegistrationForm;
-use app\models\TopAuthorSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;

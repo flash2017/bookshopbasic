@@ -1,17 +1,16 @@
 <?php
 namespace app\Validators\Book;
-use app\models\Author;
+use app\models\Book\Book;
 use yii\validators\Validator;
-use app\models\Book;
 
 class AuthorRelationValidator extends Validator
 {
     /**
      * @param Book $model
      * @param array $attribute
-     * @return bool
+     * @return void
      */
-    public function validateAttribute($model, $attribute):bool
+    public function validateAttribute($model, $attribute):void
     {
         $authors = $model->getAuthors();
         $intersecAuthors = array_intersect($authors, $attribute);

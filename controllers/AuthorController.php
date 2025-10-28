@@ -2,15 +2,13 @@
 
 namespace app\controllers;
 
-use app\models\Author;
-use app\models\AuthorSearch;
-use http\Env\Response;
+use app\models\Author\Author;
+use app\models\Author\AuthorSearch;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\rest\Serializer;
 use yii\web\Controller;
-use yii\web\JsonResponseFormatter;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * AuthorController implements the CRUD actions for Author model.

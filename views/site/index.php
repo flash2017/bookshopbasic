@@ -1,14 +1,13 @@
 <?php
 
-use app\models\LnkBookAuthors;
-use yii\widgets\ActiveForm;
-use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\TopAuthorSearch $searchModel */
+/** @var \app\models\Author\TopAuthorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Top Author';

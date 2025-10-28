@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use app\models\LnkBookAuthors;
-use app\models\LnkBookAuthorsSearch;
+use app\models\Author\LnkBookAuthors;
+use app\models\Author\LnkBookAuthorsSearch;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * LnkBookAuthorsController implements the CRUD actions for LnkBookAuthors model.

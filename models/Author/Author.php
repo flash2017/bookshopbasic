@@ -1,8 +1,6 @@
 <?php
 
-namespace app\models;
-
-use Yii;
+namespace app\models\Author;
 
 /**
  * This is the model class for table "author".
