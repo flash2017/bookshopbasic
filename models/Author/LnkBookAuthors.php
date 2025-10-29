@@ -3,6 +3,7 @@
 namespace app\models\Author;
 
 use app\models\Book\Book;
+use app\Validators\Book\IsRealBookValidator;
 use yii\db\ActiveRecord;
 
 /**

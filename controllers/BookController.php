@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Author\LnkBookAuthors;
 use app\models\Book\Book;
 use app\models\Book\BookSearch;
+use Yii;
 use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -79,26 +81,26 @@ class BookController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Book();
+        $book = new Book();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->validate()) {
-                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-                if ($name = $model->uploadImage()) { // если изображение было загружено
+            if ($book->load($this->request->post()) && $book->validate()) {
+                $book->imageFile = UploadedFile::getInstance($book, 'imageFile');
+                if ($name = $book->uploadImage()) { // если изображение было загружено
                     // сохраняем в БД имя файла изображения
-                    $model->image = $name;
+                    $book->image = $name;
                 }
 
+                $book->save();
 
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $book->id]);
             }
         } else {
-            $model->loadDefaultValues();
+            $book->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $book,
         ]);
     }
 

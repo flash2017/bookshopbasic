@@ -3,8 +3,8 @@
 namespace app\models\Book;
 
 use app\models\Author\LnkBookAuthors;
-use app\Validators\Book\AuthorRelationValidator;
-use app\Validators\Book\HasRealAuthors;
+use app\Validators\Book\IsRealBookValidator;
+use app\Validators\Book\IsRealAuthorsValidator;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -70,8 +70,6 @@ class Book extends ActiveRecord
             [['isbn'], 'string', 'max' => 18],
             [['isbn'], 'unique'],
             [['authors'], 'each', 'rule' => ['integer']],
-            [['authors'], 'each', 'rule' => [HasRealAuthors::class]],
-            /*[['authors'], AuthorRelationValidator::class],*/
         ];
     }
 
@@ -146,6 +144,36 @@ class Book extends ActiveRecord
             }
         }
         return false;
+    }
+
+    /**
+     * @param bool $runValidation
+     * @param null|array $attributeNames
+     * @return bool|mixed
+     * @throws \Throwable
+     */
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        $output = Yii::$app->db->transaction(function () use ($runValidation, $attributeNames) {
+            $output = parent::save($runValidation, $attributeNames);
+
+            if (empty($this->authors) === false) {
+                foreach ($this->authors as $authorId) {
+                    $lnkBookAuthors = new LnkBookAuthors();
+                    $lnkBookAuthors->book_id = $this->id;
+                    $lnkBookAuthors->author_id = $authorId;
+                    $lnkBookAuthors->validate();
+                    if ($lnkBookAuthors->save($runValidation, $attributeNames) === false) {
+                        $output = false;
+                        break;
+                    }
+                }
+            }
+
+            return $output;
+        });
+
+        return $output;
     }
 
 }
