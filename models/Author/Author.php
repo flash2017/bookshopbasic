@@ -18,6 +18,11 @@ namespace app\models\Author;
 class Author extends \yii\db\ActiveRecord
 {
 
+    /**
+     * @var string
+     */
+    public string $fullName = '';
+
 
     /**
      * {@inheritdoc}
@@ -69,6 +74,21 @@ class Author extends \yii\db\ActiveRecord
     public function fullName(): string
     {
         return sprintf('%s %s %s', $this->first_name , $this->last_name, $this->second_name);
+    }
+
+    public static function find()
+    {
+        return parent::find()->select([
+            '*', "CONCAT_WS(' ', first_name , last_name, second_name) as fullName"
+        ]);
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields['fullName'] = 'fullName';
+
+        return $fields;
     }
 
 }

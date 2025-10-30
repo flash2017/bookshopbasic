@@ -2,6 +2,7 @@
 
 namespace app\models\Book;
 
+use app\models\Author\Author;
 use app\models\Author\LnkBookAuthors;
 use app\Validators\Book\IsRealBookValidator;
 use app\Validators\Book\IsRealAuthorsValidator;
@@ -117,11 +118,24 @@ class Book extends ActiveRecord
         return $this->hasMany(LnkBookAuthors::class, ['book_id' => 'id']);
     }
 
+    /**
+     * @return Author[]
+     */
     public function getAuthors(): array
     {
         $data = [];
         foreach ($this->getLnkBookAuthors()->all() as $lnkAuthor) {
             $data[] = $lnkAuthor->getAuthor()->one();
+        }
+
+        return $data;
+    }
+
+    public function getAuthorsId(): array
+    {
+        $data = [];
+        foreach ($this->getAuthors() as $author) {
+            $data[] = $author->getId();
         }
 
         return $data;

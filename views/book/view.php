@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $links = '';
                     /**@var Author $author*/
                     foreach ($model->getAuthors() as $author) {
-                        $links .= Html::a('subscribe to '. $author->fullName(), '/subscribe/create?author_id=' . $author->id) . ' ';
+                        $links .= Html::a('subscribe to '. $author->fullName, '/subscribe/create?author_id=' . $author->id) . ' ';
                     }
                     return $links;
                 },

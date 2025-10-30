@@ -12,8 +12,9 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 
 $authorsSearchUrl = '/author/search';
-$authorsDataList = Author::find()->limit(10)->all();
-$authorsList = ArrayHelper::map($authorsDataList, 'id', 'name');
+$authorsDataList = $model->getAuthors();
+$authorsList = ArrayHelper::map($authorsDataList, 'id', 'fullName');
+$model->authors = array_keys($authorsList);
 ?>
 
 <div class="book-form">
@@ -32,7 +33,9 @@ $authorsList = ArrayHelper::map($authorsDataList, 'id', 'name');
     <?= $form->field($model, 'imageFile')->fileInput() ?>
     <?php echo $form->field($model, 'authors')->widget(Select2::class, [
         'data' => $authorsList,
+     //   'value'=> $authorsListValue,
         'pluginOptions' => [
+            'tags' => true,
             'allowClear' => true,
             'minimumInputLength' => 3,
             'language' => [
@@ -44,8 +47,8 @@ $authorsList = ArrayHelper::map($authorsDataList, 'id', 'name');
                 'data' => new JsExpression('function(params) { return {author_name:params.term}; }')
             ],
             'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-            'templateResult' => new JsExpression('function(author) { return author.first_name; }'),
-            'templateSelection' => new JsExpression('function(author) { return author.first_name; }'),
+            'templateResult' => new JsExpression('function(author) { return author?.fullName ?? ""; }'),
+            'templateSelection' => new JsExpression('function(author) { return author?.fullName ?? author; }'),
         ],
         'options' => [
             'multiple' => true,
